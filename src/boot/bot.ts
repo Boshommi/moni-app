@@ -1,9 +1,10 @@
 import { env } from '@/env';
-import { Bot, Context } from 'grammy';
+import { Bot } from 'grammy';
 import { I18n, type I18nFlavor } from '@grammyjs/i18n';
+import type { AppContext } from '@/types/context';
 
 // Define a custom context that includes i18n helpers
-export type MyContext = Context & I18nFlavor;
+export type MyContext = AppContext & I18nFlavor;
 
 // Create a bot object
 export const bot = new Bot<MyContext>(env.TELEGRAM_API_KEY); // <-- place your bot token here

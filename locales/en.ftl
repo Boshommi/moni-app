@@ -1,2 +1,11 @@
-start = Hello!
+start = Hello! I am a bot that helps you with your finances.
 unknown = Sorry, I didn't understand. 
+expense_added = Expense added
+invalid_expense_format = Invalid expense format. Please use: /add <amount> <description>
+message_id_not_found = Message ID not found. Could not save expense.
+invalid_expense_format_edited = Invalid format. The expense was not updated.
+expense_updated = Expense updated successfully.
+delete_reply_to_message = To delete an expense, please reply to the message that added it with the /delete command.
+not_an_expense_message = This message does not correspond to any expense.
+not_your_expense = You can only delete your own expenses.
+expense_deleted = Expense deleted successfully.
