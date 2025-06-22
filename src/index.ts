@@ -1,8 +1,10 @@
-import { bot } from '@/boot/bot';
-import { auth } from '@/middleware/auth';
+import logger from "@/boot/logger";
+import { bot } from "@/boot/bot";
+import { auth } from "@/middleware/auth";
 
 bot.use(auth);
 
-bot.command('start', (ctx) => ctx.reply('Hello!'));
+logger.info("Starting bot...");
+bot.command("start", (ctx) => ctx.reply("Hello!"));
 
 bot.start();
