@@ -12,21 +12,70 @@ datasource db {
 }
 
 model User {
-  id       Int       @id
-  nickname String?
-  expenses Expense[]
+  id        BigInt    @id // Telegram User ID
+  firstName String
+  lastName  String?
+  nickname  String? // Telegram @username
+
+  // A user can be a member of multiple groups
+  groups    GroupMember[]
+
+  // Expenses paid by this user
+  paidExpenses Expense[] @relation("PaidBy")
+
+  // Expenses this user is a participant in
+  splitExpenses Expense[] @relation("SplitAmong")
 }
 
-model Expense {
-  id Int @id @default(autoincrement())
+model Group {
+  id        BigInt   @id // Telegram Chat ID
+  title     String
+  currency  String   @default("USD")
+  language  String   @default("en")
 
-  amount      Int
-  description String
-  payer       User   @relation(fields: [payerId], references: [id])
-
-  payerId Int
-  messageId Int @unique
+  members   GroupMember[]
+  expenses  Expense[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum GroupMemberStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model GroupMember {
+  user      User              @relation(fields: [userId], references: [id])
+  userId    BigInt
+  group     Group             @relation(fields: [groupId], references: [id])
+  groupId   BigInt
+  status    GroupMemberStatus @default(ACTIVE)
+
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+
+  @@id([userId, groupId])
+}
+
+model Expense {
+  id          Int      @id @default(autoincrement())
+
+  // Amount in the smallest currency unit (e.g., cents)
+  amount      Int
+  description String
+
+  payer       User     @relation("PaidBy", fields: [payerId], references: [id])
+  payerId     BigInt
+
+  group       Group    @relation(fields: [groupId], references: [id])
+  groupId     BigInt
+
+  messageId   BigInt   @unique
+
+  // Users among whom this expense is split
+  participants User[]   @relation("SplitAmong")
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
